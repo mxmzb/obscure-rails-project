@@ -2,7 +2,12 @@
   <div class="w-full max-w-4xl mx-auto">
     <div class="text-5xl font-bold">The minimalist entrepreneur</div>
 
-    <%= link_to "Add review", "#", class: "btn btn-warning edit", id: "add-review-button" %>
+    <a 
+      href="#" 
+      class="btn btn-warning edit" 
+      id="add-review-button" 
+      data-modal="open" data-path="/reviews/new" data-element="#new-review"
+    >Add review</a>
 
     <%= render @reviews %>
   </div>
