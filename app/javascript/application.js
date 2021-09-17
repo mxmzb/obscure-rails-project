@@ -1,16 +1,37 @@
-// Entry point for the build script in your package.json
+// Entry point for the build script in your packagevt.json
 // import "@hotwired/turbo-rails"
 // import "./controllers"
 
 
-// modal handling
 (() => {
-  const modalHandler = e => {
-    e.preventDefault();
+  // ty https://dev.to/akhil_001/adding-event-listeners-to-the-future-dom-elements-using-event-bubbling-3cp1
+  const addInterceptingEventListener = (selector, event, handler) => {
+    const rootElement = document.querySelector('body');
 
-    const dataModal = e.target.getAttribute("data-modal");
-    const dataPath = e.target.getAttribute("data-path");
-    const dataElement = e.target.getAttribute("data-element");
+    
+    //since the root element is set to be body for our current dealings
+    rootElement.addEventListener(event, (evt) => {
+        let targetElement = evt.target;
+        
+        while (targetElement !== null) {
+          if (targetElement.matches(selector)) {
+            handler(evt);
+            return;
+          }
+          targetElement = targetElement.parentElement;
+        }
+      },
+      true
+    );
+  }
+
+  // modal handling
+  const modalHandler = evt => {
+    evt.preventDefault();
+
+    const dataModal = evt.target.getAttribute("data-modal");
+    const dataPath = evt.target.getAttribute("data-path");
+    const dataElement = evt.target.getAttribute("data-element");
 
     if(dataModal === "open") {
       fetch(dataPath)
@@ -48,21 +69,21 @@
     }
   }
 
-  // initially call on all elements that indicate they are a modal handler in markup
-  document.querySelectorAll("[data-modal]").forEach(modalActivator => {
-    modalActivator.addEventListener("click", modalHandler);
-  });
-})();
-
-
-
-(() => {
   // callback to handle form submissions
-  const formHandler = e => {
-    e.preventDefault();
+  const formHandler = evt => {
+    evt.preventDefault();
 
-    const form = e.target;
+    // find parent form, because we only get the input button as a target element
+    let targetElement = evt.target;
+    
+    while (targetElement !== null) {
+      if (targetElement.matches("form")) {
+        break;
+      }
+      targetElement = targetElement.parentElement;
+    }
 
+    const form = targetElement;
     const data = new FormData(form);
 
     fetch(form.action, {
@@ -94,65 +115,10 @@
       .catch(error => {
         // create some error markup which we can show in this case
       });
-
-    // close all open modals in anticipation of the form being in one.
-    // very arbitrary, but i think good enough for mvp
-    const modalContent = document.querySelector("#modal-content");
-    modalContent.textContent = "";
-    modal.classList.add("hidden");
   }
 
-  // dom observer to look for dom changes
-  // ty https://stackoverflow.com/a/14570614/744230
-  // alternatively i would have naively checked for dom character length every 100ms or so
-  const observeDOM = (() => {
-    const MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-
-    return ( obj, callback ) => {
-      if( !obj || obj.nodeType !== 1 ) return; 
-
-      if( MutationObserver ){
-        // define a new observer
-        const mutationObserver = new MutationObserver(callback);
-
-        // have the observer observe foo for changes in children
-        mutationObserver.observe( obj, { childList:true, subtree:true });
-        return mutationObserver;
-      }
-      
-      // browser support fallback
-      else if( window.addEventListener ){
-        obj.addEventListener("DOMNodeInserted", callback, false);
-        obj.addEventListener("DOMNodeRemoved", callback, false);
-      }
-    }
-  })();
-
-
-  // attach form handlers when dom changes
-  observeDOM(document.body, (m) => { 
-    const addedNodes = [], removedNodes = [];
-
-    m.forEach(record => record.addedNodes.length & addedNodes.push(...record.addedNodes));
-    m.forEach(record => record.removedNodes.length & removedNodes.push(...record.removedNodes));
-
-    // add listeners for form handling
-    addedNodes.forEach(node => {
-      const forms = node.querySelectorAll("form");
-      forms.forEach(f => {
-        f.addEventListener("submit", formHandler);
-      });
-    });
-
-    // remove added listeners again
-    removedNodes.forEach(node => {
-      const forms = node.querySelectorAll("form");
-      forms.forEach(f => {
-        f.removeEventListener("submit", formHandler);
-      });
-    });
-
-    console.log("Added:", addedNodes, "Removed:", removedNodes);
-  });
+  addInterceptingEventListener("[type=submit]", "click", formHandler);
+  addInterceptingEventListener("[data-modal]", "click", modalHandler);
 })();
+
 
