@@ -15,8 +15,8 @@
     if(dataModal === "open") {
       fetch(dataPath)
         .then(data => {
-          if (!response.ok) {
-            throw Error(response.statusText);
+          if (!data.ok) {
+            throw Error(data.statusText);
           }
           return data.text();
         })
@@ -70,8 +70,8 @@
       body: data,
     })
       .then(data => {
-        if (!response.ok) {
-          throw Error(response.statusText);
+        if (!data.ok) {
+          throw Error(data.statusText);
         }
         return data.text();
       })
