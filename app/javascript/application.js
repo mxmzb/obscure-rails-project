@@ -2,14 +2,14 @@
 // import "@hotwired/turbo-rails"
 // import "./controllers"
 
+// modal handling
 (() => {
-  document.querySelector("a").addEventListener("click", (e) => {
+  const modalHandler = e => {
     e.preventDefault();
 
     const dataModal = e.target.getAttribute("data-modal");
     const dataPath = e.target.getAttribute("data-path");
     const dataElement = e.target.getAttribute("data-element");
-    const dataTarget = e.target.getAttribute("data-target");
 
     if(dataModal === "open") {
       fetch(dataPath)
@@ -20,12 +20,27 @@
 
           // don't confuse: document is the current page document, doc is the 
           // parsed doc from dataPath
-          const target = document.querySelector(dataTarget);
+
+          // #modal-content can be specific, because this is a handler scoped 
+          // to modals
+          const modalContent = document.querySelector("#modal-content");
           const element = doc.querySelector(dataElement);
 
-          target.appendChild(element);
+          modalContent.appendChild(element);
           modal.classList.remove("hidden");
-        });
+      });
     }
-  });  
+
+    // clear all the content from modal and hide it again
+    if(dataModal === "close") {
+      const modalContent = document.querySelector("#modal-content");
+      modalContent.textContent = "";
+      modal.classList.add("hidden");
+    }
+  }
+
+  // call on all elements that indicate they are a modal handler in markup
+  document.querySelectorAll('[data-modal]').forEach(modalActivator => {
+    modalActivator.addEventListener("click", modalHandler);
+  });
 })();
