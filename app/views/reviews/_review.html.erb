@@ -1,1 +1,13 @@
-<%= image_tag "star-filled.png" %>
+<div id="review-<%= review.id %>" class="flex items-center mb-4">
+  <div class="flex mr-4">
+    <% review.rating.times do %>
+      <%= image_tag "star-filled.png", class: "mr-1" %>
+    <% end %>
+    <% (5 - review.rating).times do %>
+      <%= image_tag "star-empty.png", class: "mr-1" %>
+    <% end %>
+  </div>
+  <div class="text-gray-500">
+    <strong class="text-black font-bold"><%= review.rating %></strong>, <%= review.text %>
+  </div>
+</div>
