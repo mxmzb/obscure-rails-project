@@ -2,11 +2,7 @@
 // import "@hotwired/turbo-rails"
 // import "./controllers"
 
-
-// keep scope clean
 (() => {
-  const links = document.getElementsByTagName("a");
-
   document.querySelector("a").addEventListener("click", (e) => {
     e.preventDefault();
 
@@ -33,4 +29,3 @@
     }
   });  
 })();
-
