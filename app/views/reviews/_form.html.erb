@@ -1,4 +1,8 @@
-<%= form_with(model: review, url: root_path) do |form| %>
+<%= form_with(model: review, url: reviews_path, data: {
+  target: "#reviews",
+  element: "[id^=review]",
+  insert: "after",
+}) do |form| %>
   <% if review.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(review.errors.count, "error") %> prohibited this review from being saved:</h2>
@@ -21,7 +25,9 @@
       <%= image_tag "star-empty.png", class: "mr-1" %>
     <% end %>
   </div>
+  <%= form.hidden_field :rating, value: 4 %>
   <div class="h-8"></div>
+
 
   <h3 class="text-xl">Review</h3>
   <div class="h-4"></div>
@@ -30,7 +36,5 @@
   </div>
 
   <div class="h-8"></div>
-  <div class="actions">
-    <%= form.submit class: "h-10 px-8 rounded bg-white text-gray-500 font-bold border border-gray-400 shadow" %>
-  </div>
+  <%= form.submit class: "cursor-pointer h-10 px-8 rounded bg-white text-gray-500 font-bold border border-gray-400 shadow", data: { modal: "close" } %>
 <% end %>
