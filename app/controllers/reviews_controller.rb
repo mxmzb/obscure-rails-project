@@ -1,8 +1,8 @@
 class ReviewsController < ApplicationController
+  before_action :set_product
 
   def index
-    @reviews = Review.all
-
+    @reviews = @product.reviews
     @avg_rating = nil
 
     if @reviews.size > 0
@@ -11,11 +11,12 @@ class ReviewsController < ApplicationController
   end
 
   def new
-    @review = Review.new
+    @review = Review.new(product: @product)
   end
 
   def create
     @review = Review.new(review_params)
+    @review.product = @product
 
     if @review.save
       render :show, status: :created
@@ -27,6 +28,10 @@ class ReviewsController < ApplicationController
   private
     def review_params
       params.require(:review).permit(:rating, :text)
+    end
+
+    def set_product
+      @product = Product.find(params[:product_id])
     end
 
 end
