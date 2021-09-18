@@ -157,7 +157,7 @@ const ratingClickHandler = (evt) => {
 addInterceptingEventListener(".review-rating", "mouseover", ratingHoverHandler);
 addInterceptingEventListener(".review-rating", "mouseleave", ratingHoverLeaveHandler);
 addInterceptingEventListener(".review-rating", "click", ratingClickHandler);
-addInterceptingEventListener("[type=submit]", "click", formHandler);
+addInterceptingEventListener("[type=submit][data-transport=remote]", "click", formHandler);
 addInterceptingEventListener("[data-modal]", "click", modalHandler);
 
 
