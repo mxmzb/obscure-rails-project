@@ -7,6 +7,22 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+    <!-- Rails 7 throwing an error if I want to use .css.erb files, so declare the custom css here -->
+    <style>
+      .star {
+        width: 30px;
+        height: 30px;
+        background-image: url(<%= asset_path 'star-empty.png' %>);
+        background-position: 0 0;
+        background-size: 30px 30px;
+        background-repeat: no-repeat;
+      }
+
+      .star.active {
+        background-image: url(<%= asset_path 'star-filled.png' %>);
+      }
+    </style>
   </head>
 
   <body>
