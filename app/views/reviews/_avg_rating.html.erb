@@ -1,0 +1,11 @@
+<div id="average-rating" class="flex">
+  <div class="mr-4 text-xl">
+    <%= @avg_rating %>
+  </div>
+
+  <div class="flex">
+    <% 5.times do |i| %>
+      <div class="star box-content pr-1<%= i < @avg_rating ? " active" : "" %>" data-value="<%= i + 1 %>"></div>
+    <% end %>
+  </div>
+</div>
