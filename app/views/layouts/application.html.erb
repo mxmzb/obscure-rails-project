@@ -26,7 +26,14 @@
   </head>
 
   <body>
-    <%= yield %>
+
+    <div class="px-4">
+      <div class="w-full max-w-2xl mx-auto">
+        <div class="h-12"></div>
+        <%= yield %>
+        <div class="h-12"></div>
+      </div>
+    </div>
 
     <%= render "shared/modal" %>
   </body>

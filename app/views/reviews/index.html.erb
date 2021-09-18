@@ -1,27 +1,21 @@
-<div class="px-4">
-  <div class="w-full max-w-2xl mx-auto">
-    <div class="h-12"></div>
-    <div class="text-5xl font-bold">The minimalist entrepreneur</div>
-    <div class="h-6"></div>
+<div class="text-5xl font-bold">The minimalist entrepreneur</div>
+<div class="h-6"></div>
 
-    <div class="flex items-center justify-between">
-      <%= render "avg_rating" %>
+<div class="flex items-center justify-between">
+  <%= render "avg_rating" %>
 
-      <a 
-        href="#" 
-        class="flex items-center cursor-pointer h-10 px-8 rounded bg-white text-gray-500 font-bold border border-gray-400 shadow" 
-        id="add-review-button" 
-        data-modal="open" data-path="/reviews/new" data-element="#new-review"
-      >Add review</a>
-    </div>
-
-    <div class="h-6"></div>
-    <div class="border b-bottom border-color-gray-500"></div>
-    <div class="h-6"></div>
-
-    <div id="reviews">
-      <%= render @reviews %>
-    </div>
-  </div>
+  <a 
+    href="#" 
+    class="flex items-center cursor-pointer h-10 px-8 rounded bg-white text-gray-500 font-bold border border-gray-400 shadow" 
+    id="add-review-button" 
+    data-modal="open" data-path="/reviews/new" data-element="#new-review"
+  >Add review</a>
 </div>
 
+<div class="h-6"></div>
+<div class="border b-bottom border-color-gray-500"></div>
+<div class="h-6"></div>
+
+<div id="reviews">
+  <%= render @reviews %>
+</div>
