@@ -21,11 +21,11 @@
   <h3 class="text-xl">Rating</h3>
   <div class="h-4"></div>
   <div class="flex">
-    <% 5.times do %>
-      <%= image_tag "star-empty.png", class: "mr-1" %>
+    <% 5.times do |i| %>
+      <div class="star review-rating box-content pr-1 cursor-pointer" data-value="<%= i + 1 %>"></div>
     <% end %>
   </div>
-  <%= form.hidden_field :rating, value: 4 %>
+  <%= form.hidden_field :rating %>
   <div class="h-8"></div>
 
 

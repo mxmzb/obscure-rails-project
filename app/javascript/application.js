@@ -5,8 +5,7 @@
 
 // ty https://dev.to/akhil_001/adding-event-listeners-to-the-future-dom-elements-using-event-bubbling-3cp1
 const addInterceptingEventListener = (selector, event, handler) => {
-  const rootElement = document.querySelector('body');
-
+  const rootElement = document.querySelector("body");
   
   //since the root element is set to be body for our current dealings
   rootElement.addEventListener(event, (evt) => {
@@ -116,6 +115,48 @@ const formHandler = evt => {
     });
 }
 
+// change star images on hover
+const ratingHoverHandler = (evt) => {
+  const ratingValue = evt.target.getAttribute("data-value");
+  const stars = document.querySelectorAll(".review-rating");
+
+  for(let i = 0; i < 5; i++) {
+    if(i < ratingValue) {
+      stars[i].classList.add("active");
+    } else {
+      stars[i].classList.remove("active");
+    }
+  }
+}
+
+// change star images on hover
+const ratingHoverLeaveHandler = () => {
+  // this is the hidden input containing the value of the rating, which we will 
+  // update when the user *clicks* a star
+  // 
+  // also: .review-rating is a selectable star in the new review form, #review_rating is
+  // the hidden input element in the same form that caries the selected rating value
+  const selectedRating = parseInt(document.querySelector("#review_rating").value);
+  
+  const stars = document.querySelectorAll(".review-rating");
+
+  for(let i = 0; i < 5; i++) {
+    if(i < selectedRating) {
+      stars[i].classList.add("active");
+    } else {
+      stars[i].classList.remove("active");
+    }
+  }
+}
+
+// change star images on hover
+const ratingClickHandler = (evt) => {
+  document.querySelector("#review_rating").value = evt.target.getAttribute("data-value");
+}
+
+addInterceptingEventListener(".review-rating", "mouseover", ratingHoverHandler);
+addInterceptingEventListener(".review-rating", "mouseleave", ratingHoverLeaveHandler);
+addInterceptingEventListener(".review-rating", "click", ratingClickHandler);
 addInterceptingEventListener("[type=submit]", "click", formHandler);
 addInterceptingEventListener("[data-modal]", "click", modalHandler);
 
