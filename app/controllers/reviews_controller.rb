@@ -3,7 +3,11 @@ class ReviewsController < ApplicationController
   def index
     @reviews = Review.all
 
-    @avg_rating = (@reviews.inject(0.0) { |sum, el| sum + el.rating }.to_f / @reviews.size).round(1)
+    @avg_rating = nil
+
+    if @reviews.size > 0
+      @avg_rating = (@reviews.inject(0.0) { |sum, el| sum + el.rating }.to_f / @reviews.size).round(1)
+    end
   end
 
   def new
