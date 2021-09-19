@@ -12,7 +12,7 @@ Only Tailwind, because it seemed to be a quick solution for the little design re
 
 #### 3. Rails v7
 
-This was not a purposeful decision. I shadn't worked with Rails since v4 and was simply intruiged to see what the latest edge looks like.
+This was not a purposeful decision. I hadn't worked with Rails since v4 and was simply intruiged to see what the latest edge looks like.
 
 ## What I would do differently next time
 
