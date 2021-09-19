@@ -117,8 +117,7 @@ const formHandler = async evt => {
     const avgRatingDoc = parser.parseFromString(avgRatingHtml, "text/html");
     const avgRatingElement = avgRatingDoc.querySelector("#average-rating");
     const avgRatingContainer = document.querySelector("#average-rating");
-
-    console.log({  avgRatingHtml, avgRatingElement, avgRatingContainer })
+    
     avgRatingContainer.replaceWith(avgRatingElement);
 
     // we removed the modal indicator from the html for the form submission,
