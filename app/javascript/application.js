@@ -24,7 +24,7 @@ const addInterceptingEventListener = (selector, event, handler) => {
 }
 
 // control modal from html
-const modalHandler = evt => {
+const modalHandler = async evt => {
   evt.preventDefault();
 
   const dataModal = evt.target.getAttribute("data-modal");
@@ -32,31 +32,28 @@ const modalHandler = evt => {
   const dataElement = evt.target.getAttribute("data-element");
 
   if(dataModal === "open") {
-    fetch(dataPath)
-      .then(data => {
-        if (!data.ok) {
-          throw Error(data.statusText);
-        }
-        return data.text();
-      })
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
+    try {
+      const data = await fetch(dataPath);
+      if (!data.ok) {
+        throw Error(data.statusText);
+      }
+      const html = await data.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
 
-        // don"t confuse: document is the current page document, doc is the 
-        // parsed doc from dataPath
+      // don"t confuse: document is the current page document, doc is the 
+      // parsed doc from dataPath
+      // 
+      // #modal-content can be specific, because this is a handler scoped 
+      // to modals
+      const modalContent = document.querySelector("#modal-content");
+      const element = doc.querySelector(dataElement);
 
-        // #modal-content can be specific, because this is a handler scoped 
-        // to modals
-        const modalContent = document.querySelector("#modal-content");
-        const element = doc.querySelector(dataElement);
-
-        modalContent.appendChild(element);
-        modal.classList.remove("hidden");
-      })
-      .catch(error => {
-        // create some error markup which we can show in this case
-      });
+      modalContent.appendChild(element);
+      modal.classList.remove("hidden");
+    } catch(error) {
+      // create some error markup which we can show in this case
+    }
   }
 
   // clear all the content from modal and hide it again
@@ -68,7 +65,7 @@ const modalHandler = evt => {
 }
 
 // callback to handle form submissions
-const formHandler = evt => {
+const formHandler = async evt => {
   evt.preventDefault();
 
   // find parent form, because we only get the input button as a target element
@@ -85,52 +82,47 @@ const formHandler = evt => {
   const formData = new FormData(form);
   const parser = new DOMParser();
 
-  fetch(form.action, {
-    method: "POST",
-    body: formData,
-  })
-    .then(data => {
-      if (!data.ok) {
-        throw data;
-      }
-      return data.text();
-    })
-    .then(html => {
+  try {
+    const data = await fetch(form.action, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!data.ok) {
+      throw data;
+    }
+    const html = await data.text();
+    const doc = parser.parseFromString(html, "text/html");
+    const element = doc.querySelector(form.getAttribute("data-element"));
+    const target = document.querySelector(form.getAttribute("data-target"));
+
+    if(form.getAttribute("data-insert") === "before") {
+      target.prependChild(element);
+    }
+
+    if(form.getAttribute("data-insert") === "after") {
+      target.appendChild(element);
+    }
+
+    // we removed the modal indicator from the html for the form submission,
+    // because we want to the modal stay open if there is errors (catch). 
+    // hoowever, if there is no errors, we're closing manually here:
+    const modalContent = document.querySelector("#modal-content");
+    modalContent.textContent = "";
+    modal.classList.add("hidden");
+  } catch(error) {
+    if(error.status === 422) {
+      const html = await error.text()
       const doc = parser.parseFromString(html, "text/html");
-      const element = doc.querySelector(form.getAttribute("data-element"));
-      const target = document.querySelector(form.getAttribute("data-target"));
 
-      if(form.getAttribute("data-insert") === "before") {
-        target.prependChild(element);
-      }
-
-      if(form.getAttribute("data-insert") === "after") {
-        target.appendChild(element);
-      }
-
-      // we removed the modal indicator from the html for the form submission,
-      // because we want to the modal stay open if there is errors (catch). 
-      // hoowever, if there is no errors, we're closing manually here:
-      const modalContent = document.querySelector("#modal-content");
-      modalContent.textContent = "";
-      modal.classList.add("hidden");
-    })
-    .catch(error => {
-      if(error.status === 422) {
-        // ah, nested promises...
-        error.text()
-          .then(html => {
-            const doc = parser.parseFromString(html, "text/html");
-
-            const errorExplanation = doc.querySelector("#error_explanation");
-            const reviewErrors = document.querySelector("#review-errors");
-            
-            reviewErrors.textContent = "";
-            reviewErrors.appendChild(errorExplanation);
-          });
-      }
-      // handle other errors
-    })
+      const errorExplanation = doc.querySelector("#error_explanation");
+      const reviewErrors = document.querySelector("#review-errors");
+      
+      reviewErrors.textContent = "";
+      reviewErrors.appendChild(errorExplanation);
+    }
+    // handle other errors
+  }
 }
 
 // change star images on hover
