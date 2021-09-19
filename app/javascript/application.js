@@ -92,14 +92,34 @@ const formHandler = async evt => {
       throw reviewData;
     }
     const reviewHtml = await reviewData.text();
-    const doc = parser.parseFromString(reviewHtml, "text/html");
-    const reviewElement = doc.querySelector("[id^=review]");
+    const reviewDoc = parser.parseFromString(reviewHtml, "text/html");
+    const reviewElement = reviewDoc.querySelector("[id^=review]");
     const reviewsContainer = document.querySelector("#reviews");
 
     // change to append if you want to order reviews old -> new, but don't forget
     // to change the order in the reviews#index action accordingly
     // target.append(reviewElement);
     reviewsContainer.prepend(reviewElement);
+
+    // we'll just update the average rating on the current page without url with another
+    // request. i'm aware that's surely not a beautiful solution (among other reasons, 
+    // because it's done sequentially), but for now it shall suffice as an mvp solution
+
+    // we know that form.action is something like `/products/14/reviews`
+    const avgRatingData = await fetch(form.action + "/avg_rating", {
+      method: "GET",
+    });
+
+    if (!avgRatingData.ok) {
+      throw Error("Couldn't fetch updated average rating")
+    }
+    const avgRatingHtml = await avgRatingData.text();
+    const avgRatingDoc = parser.parseFromString(avgRatingHtml, "text/html");
+    const avgRatingElement = avgRatingDoc.querySelector("#average-rating");
+    const avgRatingContainer = document.querySelector("#average-rating");
+
+    console.log({  avgRatingHtml, avgRatingElement, avgRatingContainer })
+    avgRatingContainer.replaceWith(avgRatingElement);
 
     // we removed the modal indicator from the html for the form submission,
     // because we want to the modal stay open if there is errors (catch). 
