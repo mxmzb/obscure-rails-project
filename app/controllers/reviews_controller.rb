@@ -2,7 +2,7 @@ class ReviewsController < ApplicationController
   before_action :set_product
 
   def index
-    @reviews = @product.reviews
+    @reviews = @product.reviews.reverse
     @avg_rating = nil
 
     if @reviews.size > 0

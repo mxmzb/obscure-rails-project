@@ -96,13 +96,9 @@ const formHandler = async evt => {
     const element = doc.querySelector(form.getAttribute("data-element"));
     const target = document.querySelector(form.getAttribute("data-target"));
 
-    if(form.getAttribute("data-insert") === "before") {
-      target.prependChild(element);
-    }
-
-    if(form.getAttribute("data-insert") === "after") {
-      target.appendChild(element);
-    }
+    // change to append if you want to order reviews old -> new
+    // target.append(element);
+    target.prepend(element);
 
     // we removed the modal indicator from the html for the form submission,
     // because we want to the modal stay open if there is errors (catch). 
