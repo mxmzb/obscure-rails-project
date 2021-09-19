@@ -32,7 +32,7 @@ RSpec.describe "User story", type: :feature do
     expect(page).to have_content("Add review")
   end
 
-  scenario "can create a product review" do
+  scenario "can create a product review filling all fields in" do
     product = Product.create(name: "The bad entrepreneur")
 
     visit product_reviews_path(product)
@@ -46,6 +46,24 @@ RSpec.describe "User story", type: :feature do
 
     click_on "Submit review"
     expect(page).to have_content("just fluff")
+  end
+
+  scenario "can not create a product review without giving a rating and / or review text" do
+    product = Product.create(name: "The bad entrepreneur")
+
+    visit product_reviews_path(product)
+    expect(page).to have_content("The bad entrepreneur")
+
+    click_on "add-review-button"
+    expect(page).to have_selector("#new-review")
+
+    click_on "Submit review"
+    expect(page).to have_content("2 errors prohibited this review from being saved:")
+
+    find(".star[data-value='4']").click
+
+    click_on "Submit review"
+    expect(page).to have_content("1 error prohibited this review from being saved:")
   end
 end
 
