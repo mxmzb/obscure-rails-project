@@ -1,7 +1,7 @@
 <div id="review-<%= review.id %>" class="flex items-center mb-4">
   <div class="flex mr-4">
     <% 5.times do |i| %>
-      <div class="star box-content pr-1<%= i < review.rating ? " active" : "" %>" data-value="<%= i + 1 %>"></div>
+      <div class="star box-content pr-1<%= i < review.rating ? " active" : "" %>"></div>
     <% end %>
   </div>
   <div class="text-gray-500">
