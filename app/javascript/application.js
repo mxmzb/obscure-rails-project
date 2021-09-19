@@ -83,16 +83,16 @@ const formHandler = async evt => {
   const parser = new DOMParser();
 
   try {
-    const data = await fetch(form.action, {
+    const reviewData = await fetch(form.action, {
       method: "POST",
       body: formData,
     });
 
-    if (!data.ok) {
-      throw data;
+    if (!reviewData.ok) {
+      throw reviewData;
     }
-    const html = await data.text();
-    const doc = parser.parseFromString(html, "text/html");
+    const reviewHtml = await reviewData.text();
+    const doc = parser.parseFromString(reviewHtml, "text/html");
     const reviewElement = doc.querySelector("[id^=review]");
     const reviewsContainer = document.querySelector("#reviews");
 
@@ -118,6 +118,7 @@ const formHandler = async evt => {
       reviewErrors.appendChild(errorExplanation);
     }
     // handle other errors
+    console.log({ error })
   }
 }
 
