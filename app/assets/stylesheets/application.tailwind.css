@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+#error_explanation {
+  @apply mt-4 p-4 border border-red-400;
+}
+
+#error_explanation ul {
+  @apply mt-2 list-inside list-disc;
+}
