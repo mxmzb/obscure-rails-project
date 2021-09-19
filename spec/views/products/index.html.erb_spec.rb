@@ -4,16 +4,16 @@ RSpec.describe "products/index", type: :view do
   before(:each) do
     assign(:products, [
       Product.create!(
-        name: "Name"
+        name: "Foo"
       ),
       Product.create!(
-        name: "Name"
+        name: "Foo"
       )
     ])
   end
 
   it "renders a list of products" do
     render
-    assert_select "tr>td", text: "Name".to_s, count: 2
+    assert_select ".scaffold_record", text: /Foo/, count: 2
   end
 end
