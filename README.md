@@ -10,6 +10,9 @@ I didn't want to deal with writing a dedicated REST API (or any other kind of AP
 
 Only Tailwind, because it seemed to be a quick solution for the little design requirements and the focus didn't seem to lay on CSS. Besides that, I took the "vanilla JS" approach in the challenge description literally. There is only dev tooling deps and setup (guard, rspec, bundling, etc.)
 
+#### 3. Rails v7
+
+This was not a purposeful decision. I shadn't worked with Rails since v4 and was simply intruiged to see what the latest edge looks like.
 
 ## What I would do differently next time
 
