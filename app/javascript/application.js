@@ -23,7 +23,7 @@ const addInterceptingEventListener = (selector, event, handler) => {
   );
 }
 
-// modal handling
+// control modal from html
 const modalHandler = evt => {
   evt.preventDefault();
 
@@ -107,6 +107,13 @@ const formHandler = evt => {
       if(form.getAttribute("data-insert") === "after") {
         target.appendChild(element);
       }
+
+      // we removed the modal indicator from the html for the form submission,
+      // because we want to the modal stay open if there is errors (catch). 
+      // hoowever, if there is no errors, we're closing manually here:
+      const modalContent = document.querySelector("#modal-content");
+      modalContent.textContent = "";
+      modal.classList.add("hidden");
     })
     .catch(error => {
       if(error.status === 422) {
