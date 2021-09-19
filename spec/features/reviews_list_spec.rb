@@ -65,5 +65,44 @@ RSpec.describe "User story", type: :feature do
     click_on "Submit review"
     expect(page).to have_content("1 error prohibited this review from being saved:")
   end
+
+  scenario "after creating an nth review the average rating is showing the correct values" do
+    product = Product.create(name: "The bad entrepreneur")
+    review = Review.create(rating: 4, text: "fluff", product: product)
+
+    visit product_reviews_path(product)
+    expect(find("#average-rating")).to have_content("4.0")
+    expect(find("#average-rating")).to have_selector(".star.active", count: 4)
+
+    # let's check the active stars are rounded up to 3 if the average is 2.5
+    review = Review.create(rating: 1, text: "more fluff", product: product)
+    # reload page because we added just in db and don't have a websocket in place to update
+    visit current_path
+    expect(find("#average-rating")).to have_content("2.5")
+    expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+
+    # let's check the active stars are rounded down to 2 if the average is 2.33
+    review = Review.create(rating: 2, text: "even more fluff", product: product)
+    visit current_path
+    expect(find("#average-rating")).to have_content("2.3")
+    expect(find("#average-rating")).to have_selector(".star.active", count: 2)
+  end
+
+  scenario "after creating a 2nd review through the form the average rating adjusts without reload" do
+    product = Product.create(name: "The bad entrepreneur")
+    review = Review.create(rating: 4, text: "fluff", product: product)
+
+    visit product_reviews_path(product)
+
+    click_on "add-review-button"
+    expect(page).to have_selector("#new-review")
+
+    find(".star[data-value='1']").click
+    fill_in "review_text", with: "just fluff"
+
+    click_on "Submit review"
+    expect(find("#average-rating")).to have_content("2.5")
+    expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+  end
 end
 
