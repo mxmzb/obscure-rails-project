@@ -96,7 +96,8 @@ const formHandler = async evt => {
     const reviewElement = doc.querySelector("[id^=review]");
     const reviewsContainer = document.querySelector("#reviews");
 
-    // change to append if you want to order reviews old -> new
+    // change to append if you want to order reviews old -> new, but don't forget
+    // to change the order in the reviews#index action accordingly
     // target.append(reviewElement);
     reviewsContainer.prepend(reviewElement);
 
