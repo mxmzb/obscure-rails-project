@@ -1,12 +1,12 @@
 <div id="average-rating" class="flex">
   <% if @avg_rating.present? %>
     <div class="mr-4 text-xl">
-      <%= @avg_rating.round(0) %>
+      <%= @avg_rating %>
     </div>
 
     <div class="flex">
       <% 5.times do |i| %>
-        <div class="star box-content pr-1<%= i < @avg_rating ? " active" : "" %>"></div>
+        <div class="star box-content pr-1<%= i < @avg_rating.round(0) ? " active" : "" %>"></div>
       <% end %>
     </div>
   <% else %>
