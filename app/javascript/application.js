@@ -82,23 +82,21 @@ const formHandler = evt => {
   }
 
   const form = targetElement;
-  const data = new FormData(form);
+  const formData = new FormData(form);
+  const parser = new DOMParser();
 
   fetch(form.action, {
     method: "POST",
-    body: data,
+    body: formData,
   })
     .then(data => {
       if (!data.ok) {
-        throw Error(data.statusText);
+        throw data;
       }
       return data.text();
     })
     .then(html => {
-      const parser = new DOMParser();
       const doc = parser.parseFromString(html, "text/html");
-
-      // get the first element that matches the target
       const element = doc.querySelector(form.getAttribute("data-element"));
       const target = document.querySelector(form.getAttribute("data-target"));
 
@@ -111,8 +109,21 @@ const formHandler = evt => {
       }
     })
     .catch(error => {
-      // create some error markup which we can show in this case
-    });
+      if(error.status === 422) {
+        // ah, nested promises...
+        error.text()
+          .then(html => {
+            const doc = parser.parseFromString(html, "text/html");
+
+            const errorExplanation = doc.querySelector("#error_explanation");
+            const reviewErrors = document.querySelector("#review-errors");
+            
+            reviewErrors.textContent = "";
+            reviewErrors.appendChild(errorExplanation);
+          });
+      }
+      // handle other errors
+    })
 }
 
 // change star images on hover

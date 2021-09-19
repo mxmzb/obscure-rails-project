@@ -1,5 +1,6 @@
 <%= form_with(model: review, url: product_reviews_path(@product), data: {
   target: "#reviews",
+  errorstarget: "#new-review",
   element: "[id^=review]",
   insert: "after",
 }) do |form| %>
@@ -34,6 +35,9 @@
   <div class="field">
     <%= form.text_field :text, class: "border-none focus:outline-none", placeholder: "Start typing..." %>
   </div>
+
+  <!-- this is just a container, we'll render errors inside if they occur -->
+  <div id="review-errors"></div>
 
   <div class="h-8"></div>
   <%= form.submit "Submit review", class: "cursor-pointer h-10 px-8 rounded bg-white text-gray-500 font-bold border border-gray-400 shadow", data: { transport: "remote", modal: "close" } %>
