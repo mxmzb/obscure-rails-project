@@ -6,7 +6,7 @@
 
     <div class="flex">
       <% 5.times do |i| %>
-        <div class="star box-content pr-1<%= i < @avg_rating ? " active" : "" %>" data-value="<%= i + 1 %>"></div>
+        <div class="star box-content pr-1<%= i < @avg_rating ? " active" : "" %>"></div>
       <% end %>
     </div>
   <% else %>
