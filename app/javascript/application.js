@@ -93,12 +93,12 @@ const formHandler = async evt => {
     }
     const html = await data.text();
     const doc = parser.parseFromString(html, "text/html");
-    const element = doc.querySelector(form.getAttribute("data-element"));
-    const target = document.querySelector(form.getAttribute("data-target"));
+    const reviewElement = doc.querySelector("[id^=review]");
+    const reviewsContainer = document.querySelector("#reviews");
 
     // change to append if you want to order reviews old -> new
-    // target.append(element);
-    target.prepend(element);
+    // target.append(reviewElement);
+    reviewsContainer.prepend(reviewElement);
 
     // we removed the modal indicator from the html for the form submission,
     // because we want to the modal stay open if there is errors (catch). 

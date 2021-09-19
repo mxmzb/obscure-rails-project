@@ -1,8 +1,4 @@
-<%= form_with(model: review, url: product_reviews_path(@product), data: {
-  target: "#reviews",
-  errorstarget: "#new-review",
-  element: "[id^=review]",
-}) do |form| %>
+<%= form_with(model: review, url: product_reviews_path(@product)) do |form| %>
   <% if review.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(review.errors.count, "error") %> prohibited this review from being saved:</h2>
