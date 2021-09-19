@@ -1,7 +1,12 @@
 require "rails_helper"
 
+# these were helpful 
+# https://thoughtbot.com/blog/rspec-integration-tests-with-capybara
+# https://www.codewithjason.com/rails-integration-tests-rspec-capybara/
+# https://www.digitalocean.com/community/tutorials/build-a-restful-json-api-with-rails-5-part-one
+
 RSpec.describe "User story", type: :feature do
-  it "can create a new product" do
+  scenario "can create a new product" do
     visit root_path
     expect(page).to have_content("New product")
 
@@ -15,7 +20,7 @@ RSpec.describe "User story", type: :feature do
     expect(page).to have_content("Product was successfully created.")
   end
 
-  it "can show product reviews when no reviews have been written" do
+  scenario "can show product reviews when no reviews have been written" do
     product = Product.create(name: "The bad entrepreneur")
 
     visit products_path
@@ -27,7 +32,7 @@ RSpec.describe "User story", type: :feature do
     expect(page).to have_content("Add review")
   end
 
-  it "can create a product review" do
+  scenario "can create a product review" do
     product = Product.create(name: "The bad entrepreneur")
 
     visit product_reviews_path(product)
