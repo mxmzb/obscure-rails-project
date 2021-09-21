@@ -1,6 +1,17 @@
 // Entry point for the build script in your packagevt.json
 // import "@hotwired/turbo-rails"
 // import "./controllers"
+import React from "react";
+import { render } from "react-dom";
+
+const App = () => (
+  <div>hello react</div>
+);
+
+document.addEventListener("DOMContentLoaded", () => {
+  render(<App />, document.body.appendChild(document.createElement("div")));
+});
+
 
 
 // ty https://dev.to/akhil_001/adding-event-listeners-to-the-future-dom-elements-using-event-bubbling-3cp1
