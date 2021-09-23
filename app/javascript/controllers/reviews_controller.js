@@ -5,10 +5,10 @@ import App from "../react_app/components/App";
 
 export default class extends Controller {
   connect() {
-    render(<div>Hello React</div>, this.element);
+    render(<App productId={this.element.dataset.productId} />, this.element);
   }
 
   disconnect() {
-    this.element.destroy(reactRoot);
+    this.element.remove();
   }
 }
