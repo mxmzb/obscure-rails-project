@@ -1,11 +1,10 @@
 module.exports = {
-  mode: 'jit',
+  mode: "jit",
   purge: [
-    './app/views/**/*.html.erb',
-    './app/helpers/**/*.rb',
-    './app/javascript/**/*.js'
+    "./app/views/**/*.html.erb",
+    "./app/helpers/**/*.rb",
+    "./app/javascript/**/*.js",
+    "./app/javascript/**/*.jsx",
   ],
-  plugins: [
-    require('tailwindcss'),
-  ]
-}
+  plugins: [require("tailwindcss")],
+};
