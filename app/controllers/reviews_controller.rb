@@ -13,6 +13,10 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def show
+    @review = Review.find(params[:id])
+  end
+
   # this is the same as index for now
   def avg_rating
     @reviews = @product.reviews

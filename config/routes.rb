@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     get 'reviews', to: 'reviews#index'
     get 'reviews/new'
     get 'reviews/avg_rating', to: 'reviews#avg_rating'
+    get 'reviews/:id', to: 'reviews#show'
     post 'reviews', to: 'reviews#create'
   end
 
