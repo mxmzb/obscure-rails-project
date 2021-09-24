@@ -42,7 +42,7 @@ RSpec.describe "User story", type: :feature do
     expect(page).to have_selector("#new-review")
 
     find(".star[data-value='4']").click
-    fill_in "review_text", with: "just fluff"
+    fill_in "text", with: "just fluff"
 
     click_on "Submit review"
     expect(page).to have_content("just fluff")
@@ -98,7 +98,7 @@ RSpec.describe "User story", type: :feature do
     expect(page).to have_selector("#new-review")
 
     find(".star[data-value='1']").click
-    fill_in "review_text", with: "just fluff"
+    fill_in "text", with: "just fluff"
 
     click_on "Submit review"
     expect(find("#average-rating")).to have_content("2.5")

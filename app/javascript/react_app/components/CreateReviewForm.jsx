@@ -98,8 +98,10 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
     return false;
   };
 
+  const errorsCount = Object.values(errors).length;
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} id="new-review">
       <h2 className="text-5xl font-bold">What's your rating?</h2>
       <div className="h-8"></div>
 
@@ -108,11 +110,14 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
       <div className="flex">
         {[...Array(5)].map((e, i) => (
           <div
-            className={`cursor-pointer star box-content pr-1${starIsActive(i) ? " active" : ""}`}
+            className={`star cursor-pointer star box-content pr-1${
+              starIsActive(i) ? " active" : ""
+            }`}
             key={`avg-rating_star-${i}`}
             onClick={() => setFieldValue("rating", i + 1)}
             onMouseOver={() => setRatingHoverValue(i + 1)}
             onMouseLeave={() => setRatingHoverValue(undefined)}
+            data-value={i + 1}
           ></div>
         ))}
       </div>
@@ -129,9 +134,10 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
         value={values.text}
       />
 
-      {Object.values(errors).length > 0 && (
+      {errorsCount > 0 && (
         <div id="error_explanation">
-          <p>There are errors in your review:</p>
+          {errorsCount == 1 && <p>1 error prohibited this review from being saved:</p>}
+          {errorsCount > 1 && <p>{errorsCount} errors prohibited this review from being saved:</p>}
           <ul>
             {Object.keys(errors).map((key) => (
               <li key={`review-err-${key}`}>{errors[key]}</li>
