@@ -44,6 +44,9 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
         queryClient.setQueryData(["product", productId], context.previousProduct);
       },
       onSettled: async (data, error, variables, context) => {
+        // this part is quite nice, because it will automatically update the
+        // average rating, too (we're refetching the whole product by invalidating
+        // here).
         queryClient.invalidateQueries(["product", productId]);
       },
     },
