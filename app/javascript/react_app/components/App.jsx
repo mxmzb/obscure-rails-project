@@ -3,7 +3,16 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 import Reviews from "./Reviews";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  // this is just to demonstrate live data better. react-query will refetch data every
+  // time the browser is focused, which is neat feature but it's not live data and it
+  // makes working live data difficult to spot in testing
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = ({ productId }) => {
   // if for some reason there is no product id, for this
