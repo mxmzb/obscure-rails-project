@@ -1,13 +1,51 @@
 import React from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useFormik } from "formik";
 import axios from "axios";
+import { nanoid } from "nanoid";
 
 const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
   const [ratingHoverValue, setRatingHoverValue] = React.useState();
 
-  const mutation = useMutation((newReview) =>
-    axios.post(`/products/${productId}/reviews.json`, newReview),
+  // helpful resources: https://react-query.tanstack.com/guides/mutations
+  // and https://react-query.tanstack.com/guides/optimistic-updates
+  const queryClient = useQueryClient();
+  const mutation = useMutation(
+    async (newReview) => (await axios.post(`/products/${productId}/reviews.json`, newReview)).data,
+    {
+      onMutate: async (variables) => {
+        await queryClient.cancelQueries(["product", productId]);
+        const previousProduct = queryClient.getQueryData(["product", productId]);
+
+        // nanoid just to generate unique id for the time being, as we need the server to
+        // know what the real id of the new review is
+        const optimisticReview = { id: nanoid(), text: variables.text, rating: variables.rating };
+
+        queryClient.setQueryData(["product", productId], (old) => ({
+          ...old,
+          reviews: [optimisticReview, ...old.reviews],
+        }));
+
+        return { optimisticReview, previousProduct };
+      },
+      onSuccess: (result, variables, context) => {
+        // Replace optimistic todo in the todos list with the result
+        // so we get the real review id
+        queryClient.setQueryData(["product", productId], (old) => ({
+          ...old,
+          reviews: old.reviews.map((review) =>
+            review.id === context.optimisticReview.id ? result : review,
+          ),
+        }));
+      },
+      onError: (error, variables, context) => {
+        // just reset the whole product back to what it was before
+        queryClient.setQueryData(["product", productId], context.previousProduct);
+      },
+      onSettled: async (data, error, variables, context) => {
+        queryClient.invalidateQueries(["product", productId]);
+      },
+    },
   );
 
   const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
@@ -15,10 +53,10 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
       rating: undefined,
       text: "",
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
+      // this onSubmit is from props, and it is just a handler to close the modal
       onSubmit(values);
-      console.log(values);
-
+      resetForm();
       await mutation.mutate(values);
     },
   });
@@ -69,6 +107,7 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
         className="border-none focus:outline-none"
         placeholder="Start typing..."
         onChange={handleChange}
+        value={values.text}
       />
 
       <div id="review-errors"></div>
