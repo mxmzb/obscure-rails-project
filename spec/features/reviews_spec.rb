@@ -104,5 +104,42 @@ RSpec.describe "User story", type: :feature do
     expect(find("#average-rating")).to have_content("2.5")
     expect(find("#average-rating")).to have_selector(".star.active", count: 3)
   end
+
+
+  scenario "retrieves live updates" do
+    product = Product.create(name: "The bad entrepreneur")
+    review = Review.create(rating: 4, text: "fluff", product: product)
+
+    visit product_reviews_path(product)
+
+    expect(find("#average-rating")).to have_content("4.0")
+    expect(find("#average-rating")).to have_selector(".star.active", count: 4)
+    expect(page).to have_selector(".review", count: 1)
+
+    Capybara.using_session("2nd session") do
+      visit product_reviews_path(product)
+
+      expect(find("#average-rating")).to have_content("4.0")
+      expect(find("#average-rating")).to have_selector(".star.active", count: 4)
+      expect(page).to have_selector(".review", count: 1)
+    end
+
+    click_on "add-review-button"
+    expect(page).to have_selector("#new-review")
+
+    find(".star[data-value='1']").click
+    fill_in "text", with: "just fluff"
+
+    click_on "Submit review"
+    expect(find("#average-rating")).to have_content("2.5")
+    expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+    expect(page).to have_selector(".review", count: 2)
+
+    Capybara.using_session("2nd session") do
+      expect(find("#average-rating")).to have_content("2.5")
+      expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+      expect(page).to have_selector(".review", count: 2)
+    end
+  end
 end
 
