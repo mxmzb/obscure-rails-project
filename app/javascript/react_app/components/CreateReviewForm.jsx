@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { useFormik } from "formik";
 import axios from "axios";
 import { nanoid } from "nanoid";
+import * as Yup from "yup";
 
 const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
   const [ratingHoverValue, setRatingHoverValue] = React.useState();
@@ -48,11 +49,26 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
     },
   );
 
-  const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
+  const { values, errors, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
       rating: undefined,
       text: "",
     },
+    // let's disable validation on the fly, pnly show errors after form submission
+    // this is a ux decision mainly (in the real world i'd want to a/b test this vs
+    // on-the-fly validation, because i've seen good reasons for both approaches)
+    validateOnBlur: false,
+    validateOnChange: false,
+    validationSchema: Yup.object().shape({
+      rating: Yup.number()
+        .required("Rating is required")
+        .min(1, "Invalid rating")
+        .max(5, "Invalid rating"),
+      text: Yup.string()
+        .min(5, "Text too short")
+        .max(50, "Text too long")
+        .required("Text required"),
+    }),
     onSubmit: async (values, { resetForm }) => {
       // this onSubmit is from props, and it is just a handler to close the modal
       onSubmit(values);
@@ -110,7 +126,16 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
         value={values.text}
       />
 
-      <div id="review-errors"></div>
+      {Object.values(errors).length > 0 && (
+        <div id="error_explanation">
+          <p>There are errors in your review:</p>
+          <ul>
+            {Object.keys(errors).map((key) => (
+              <li key={`review-err-${key}`}>{errors[key]}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="h-8"></div>
       <input
