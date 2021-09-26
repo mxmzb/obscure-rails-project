@@ -122,24 +122,22 @@ RSpec.describe "User story", type: :feature do
       expect(find("#average-rating")).to have_content("4.0")
       expect(find("#average-rating")).to have_selector(".star.active", count: 4)
       expect(page).to have_selector(".review", count: 1)
-    end
 
-    click_on "add-review-button"
-    expect(page).to have_selector("#new-review")
+      click_on "add-review-button"
+      expect(page).to have_selector("#new-review")
 
-    find(".star[data-value='1']").click
-    fill_in "text", with: "just fluff"
+      find(".star[data-value='1']").click
+      fill_in "text", with: "just fluff"
 
-    click_on "Submit review"
-    expect(find("#average-rating")).to have_content("2.5")
-    expect(find("#average-rating")).to have_selector(".star.active", count: 3)
-    expect(page).to have_selector(".review", count: 2)
-
-    Capybara.using_session("2nd session") do
+      click_on "Submit review"
       expect(find("#average-rating")).to have_content("2.5")
       expect(find("#average-rating")).to have_selector(".star.active", count: 3)
       expect(page).to have_selector(".review", count: 2)
     end
+    
+    expect(find("#average-rating")).to have_content("2.5")
+    expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+    expect(page).to have_selector(".review", count: 2)
   end
 end
 
