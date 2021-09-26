@@ -1,7 +1,11 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import actioncable from "actioncable";
 
 import Reviews from "./Reviews";
+
+const CableApp = {};
+CableApp.cable = actioncable.createConsumer(`ws://${process.env.HOST}/cable`);
 
 const queryClient = new QueryClient({
   // this is just to demonstrate live data better. react-query will refetch data every
@@ -28,7 +32,7 @@ const App = ({ productId }) => {
       cause we cannot use useQuery in <App /> as that's 
       where we wrap with <QueryClientProvider /> 
     */}
-      <Reviews productId={productId} />
+      <Reviews productId={productId} cable={CableApp.cable} />
     </QueryClientProvider>
   );
 };

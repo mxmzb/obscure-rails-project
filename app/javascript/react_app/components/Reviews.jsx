@@ -1,5 +1,5 @@
 import React from "react";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { useQueryClient, useQuery } from "react-query";
 import axios from "axios";
 
 import ReviewsList from "./ReviewsList";
@@ -7,12 +7,27 @@ import AverageRating from "./AverageRating";
 import Modal from "./Modal";
 import CreateReviewForm from "./CreateReviewForm";
 
-const Reviews = ({ productId }) => {
+const Reviews = ({ productId, cable }) => {
   const [showCreateReviewForm, setShowCreateReviewForm] = React.useState(false);
   const { isLoading, error, data } = useQuery(
     ["product", productId],
     async () => (await axios.get(`/products/${productId}.json`)).data,
   );
+
+  const queryClient = useQueryClient();
+
+  React.useEffect(() => {
+    if (!!cable && !!productId) {
+      cable.subscriptions.create(`ProductChannel`, {
+        connected: () => {
+          console.log("connected to actioncable");
+        },
+        received: (data) => {
+          queryClient.setQueryData(["product", productId], data);
+        },
+      });
+    }
+  }, [cable, productId, queryClient]);
 
   if (isLoading) return "Loading...";
 
