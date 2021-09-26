@@ -10,4 +10,6 @@ While in the vanilla JS branch I embedded the errors (if any) from the response,
 
 `bundle exec rspec`
 
-All the useful tests are in [`spec/features/reviews_spec.rb`](spec/features/reviews_spec.rb)
+**Important:** Development and test process both use the same host and port (localhost:3000), so you can run only either dev or tests at a time. The reason for this is because it's a quick fix (otherwise we need to pass the new host + port from the test env to the React component that connects to the cable).
+
+All the useful tests are in [`spec/features/reviews_spec.rb`](spec/features/reviews_spec.rb).
