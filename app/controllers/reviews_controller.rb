@@ -32,11 +32,16 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    @review = Review.new(review_params)
-    @review.product = @product
+    @review = @product.reviews.build(review_params)
 
     respond_to do |format|
-      if @review.save
+      if @product.save
+        ActionCable.server.broadcast 'ProductChannel', JSON.parse(
+          render_to_string(
+            partial: "products/product",
+            locals: { product: @product }
+          )
+        )
         format.html { redirect_to @review, notice: "Review was successfully created." }
         format.json { render :show, status: :created, location: [@review.product, @review] }
       else
