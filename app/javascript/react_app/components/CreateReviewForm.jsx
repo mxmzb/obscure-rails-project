@@ -136,7 +136,8 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
 
       {errorsCount > 0 && (
         <div id="error_explanation">
-          {errorsCount == 1 && <p>1 error prohibited this review from being saved:</p>}
+          {/* this should be localized better obviously, but it's is alright like this for now */}
+          {errorsCount === 1 && <p>1 error prohibited this review from being saved:</p>}
           {errorsCount > 1 && <p>{errorsCount} errors prohibited this review from being saved:</p>}
           <ul>
             {Object.keys(errors).map((key) => (
