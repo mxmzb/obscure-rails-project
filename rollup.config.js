@@ -18,6 +18,11 @@ export default {
     replace({
       values: {
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+        "process.env.HOST":
+          process.env.NODE_ENV === "development"
+            ? JSON.stringify("localhost:3000")
+            : // ACTIONCABLE_HOST="obscure-project-react.herokuapp.com" in heroku
+              JSON.stringify(process.env.ACTIONCABLE_HOST),
       },
       preventAssignment: true,
     }),
