@@ -5,7 +5,7 @@ import actioncable from "actioncable";
 import Reviews from "./Reviews";
 
 const CableApp = {};
-CableApp.cable = actioncable.createConsumer(`ws://${process.env.HOST}/cable`);
+CableApp.cable = actioncable.createConsumer(`${process.env.ACTIONCABLE_HOST}/cable`);
 
 const queryClient = new QueryClient({
   // this is just to demonstrate live data better. react-query will refetch data every
