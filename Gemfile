@@ -3,8 +3,11 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.0.2"
 
-# Use local checkout of Rails
-gem "rails", path: "/Volumes/Projects/rails"
+gem "rails", "7.0.0.alpha2"
+
+# Use local checkout of Rails, just `git clone https://github.com/rails/rails`
+# into a directory and specify the path here
+# gem "rails", path: "/Volumes/Projects/rails"
 
 # Use mysql as the database for Active Record
 gem "mysql2", "~> 0.5"
