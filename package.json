@@ -7,6 +7,7 @@
     "actioncable": "^5.2.6",
     "autoprefixer": "^10.3.4",
     "axios": "^0.21.4",
+    "classnames": "^2.3.1",
     "esbuild": "^0.12.28",
     "formik": "^2.2.9",
     "nanoid": "^3.1.25",
