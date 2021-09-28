@@ -10,8 +10,8 @@
 
     <!-- Rails 7 throwing an error if I want to use .css.erb files, so declare the custom css here -->
     <style>
-      .star {
-        width: 30px;
+      .star-left {
+        width: 15px;
         height: 30px;
         background-image: url(<%= asset_path 'star-empty.png' %>);
         background-position: 0 0;
@@ -19,7 +19,16 @@
         background-repeat: no-repeat;
       }
 
-      .star.active {
+      .star-right {
+        width: 15px;
+        height: 30px;
+        background-image: url(<%= asset_path 'star-empty.png' %>);
+        background-position: -15px 0;
+        background-size: 30px 30px;
+        background-repeat: no-repeat;
+      }
+
+      .star-left.active, .star-right.active {
         background-image: url(<%= asset_path 'star-filled.png' %>);
       }
     </style>

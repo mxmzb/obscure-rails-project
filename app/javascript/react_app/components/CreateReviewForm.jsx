@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import * as Yup from "yup";
+import classNames from "classnames";
 
 const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
   const [ratingHoverValue, setRatingHoverValue] = React.useState();
@@ -83,13 +84,13 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
   const starIsActive = (starIndex) => {
     // there is a hover going on, so that's higher priority than the selected value
     if (ratingHoverValue !== undefined) {
-      if (starIndex < ratingHoverValue) {
+      if (starIndex <= ratingHoverValue) {
         return true;
       }
     }
 
     if (values.rating !== undefined && ratingHoverValue === undefined) {
-      if (starIndex < values.rating) {
+      if (starIndex <= values.rating) {
         return true;
       }
     }
@@ -108,18 +109,33 @@ const CreateReviewForm = ({ productId, onSubmit = () => {} }) => {
       <h3 className="text-xl">Rating</h3>
       <div className="h-4"></div>
       <div className="flex">
-        {[...Array(5)].map((e, i) => (
-          <div
-            className={`star cursor-pointer star box-content pr-1${
-              starIsActive(i) ? " active" : ""
-            }`}
-            key={`avg-rating_star-${i}`}
-            onClick={() => setFieldValue("rating", i + 1)}
-            onMouseOver={() => setRatingHoverValue(i + 1)}
-            onMouseLeave={() => setRatingHoverValue(undefined)}
-            data-value={i + 1}
-          ></div>
-        ))}
+        {[...Array(10)].map((e, i) => {
+          // we could work with 10 points here, too, and instead normalize to 5 points
+          // when we submit the form. there is no reason to do it this or the other way,
+          // so it is just personal preference to do it here.
+          const starVal = (i + 1) / 2;
+
+          return (
+            <div
+              className={classNames("star cursor-pointer box-content", {
+                active: starIsActive(starVal),
+                "star-left": i % 2 === 0,
+                "star-right": i % 2 === 1,
+                "pr-1": i % 2 === 1,
+              })}
+              key={`avg-rating_star-${i}`}
+              // let's make 1 full star the minimum, (with `Math.max(...)`) because
+              // if you could give 0.5 stars, you should be able to give 0 stars, too,
+              // but that's all mainly ui + business implication/problems that we don't
+              // want to take special care of for this challenge test (also i genuinely
+              // think, setting the minumum to 1 star is the right business move)
+              onClick={() => setFieldValue("rating", Math.max(starVal, 1))}
+              onMouseOver={() => setRatingHoverValue(Math.max(starVal, 1))}
+              onMouseLeave={() => setRatingHoverValue(undefined)}
+              data-value={starVal}
+            ></div>
+          );
+        })}
       </div>
 
       <div className="h-8"></div>

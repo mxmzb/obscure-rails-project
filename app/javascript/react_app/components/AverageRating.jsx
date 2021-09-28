@@ -1,3 +1,5 @@
+import classNames from "classnames";
+
 const AverageRating = ({ value }) => (
   <div id="average-rating" className="flex">
     {!!value && (
@@ -5,9 +7,14 @@ const AverageRating = ({ value }) => (
         <div className="mr-4 text-xl">{value.toFixed(1)}</div>
 
         <div className="flex">
-          {[...Array(5)].map((e, i) => (
+          {[...Array(10)].map((e, i) => (
             <div
-              className={`star box-content pr-1${i < Math.round(value) ? " active" : ""}`}
+              className={classNames("star box-content", {
+                "star-left": i % 2 === 0,
+                "star-right": i % 2 === 1,
+                "pr-1": i % 2 === 1,
+                active: i < Math.round(value * 2),
+              })}
               key={`avg-rating_star-${i}`}
             ></div>
           ))}
