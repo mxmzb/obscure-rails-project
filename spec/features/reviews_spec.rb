@@ -72,20 +72,20 @@ RSpec.describe "User story", type: :feature do
 
     visit product_reviews_path(product)
     expect(find("#average-rating")).to have_content("4.0")
-    expect(find("#average-rating")).to have_selector(".star.active", count: 4)
+    expect(find("#average-rating")).to have_selector(".star.active", count: 8)
 
     # let's check the active stars are rounded up to 3 if the average is 2.5
     review = Review.create(rating: 1, text: "more fluff", product: product)
     # reload page because we added just in db and don't have a websocket in place to update
     visit current_path
     expect(find("#average-rating")).to have_content("2.5")
-    expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+    expect(find("#average-rating")).to have_selector(".star.active", count: 5)
 
     # let's check the active stars are rounded down to 2 if the average is 2.33
     review = Review.create(rating: 2, text: "even more fluff", product: product)
     visit current_path
     expect(find("#average-rating")).to have_content("2.3")
-    expect(find("#average-rating")).to have_selector(".star.active", count: 2)
+    expect(find("#average-rating")).to have_selector(".star.active", count: 5)
   end
 
   scenario "after creating a 2nd review through the form the average rating adjusts without reload" do
@@ -102,7 +102,7 @@ RSpec.describe "User story", type: :feature do
 
     click_on "Submit review"
     expect(find("#average-rating")).to have_content("2.5")
-    expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+    expect(find("#average-rating")).to have_selector(".star.active", count: 5)
   end
 
 
@@ -113,14 +113,14 @@ RSpec.describe "User story", type: :feature do
     visit product_reviews_path(product)
 
     expect(find("#average-rating")).to have_content("4.0")
-    expect(find("#average-rating")).to have_selector(".star.active", count: 4)
+    expect(find("#average-rating")).to have_selector(".star.active", count: 8)
     expect(page).to have_selector(".review", count: 1)
 
     Capybara.using_session("2nd session") do
       visit product_reviews_path(product)
 
       expect(find("#average-rating")).to have_content("4.0")
-      expect(find("#average-rating")).to have_selector(".star.active", count: 4)
+      expect(find("#average-rating")).to have_selector(".star.active", count: 8)
       expect(page).to have_selector(".review", count: 1)
 
       click_on "add-review-button"
@@ -131,12 +131,12 @@ RSpec.describe "User story", type: :feature do
 
       click_on "Submit review"
       expect(find("#average-rating")).to have_content("2.5")
-      expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+      expect(find("#average-rating")).to have_selector(".star.active", count: 5)
       expect(page).to have_selector(".review", count: 2)
     end
     
     expect(find("#average-rating")).to have_content("2.5")
-    expect(find("#average-rating")).to have_selector(".star.active", count: 3)
+    expect(find("#average-rating")).to have_selector(".star.active", count: 5)
     expect(page).to have_selector(".review", count: 2)
   end
 end
