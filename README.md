@@ -38,6 +38,18 @@ In this particular case, I think approach 1. and 2. are fairly similar and good.
 
 Ultimately, I will be going for approach 2., mainly because I feel like I can save a few lines of code on it (e.g. I just need to change the field type from int to float, and can avoid multiplying every value by 2) and because it is probably a little less work to adjust already existing tests to the floating 5-points rating system.
 
+## What I would do differently next time
+
+I wouldn't exactly do much differently. I think the tools/stack used are good enough and the code could truly serve for a productive MVP. However, to get out of MVP mode I would not stop at this point. I would further...
+
+- write more tests and maybe improve the existing ones more
+- change the actioncable integration to subscribe only to the visible product instead to all products
+- additionally to the live push from actioncable I would update it synchronously when submitting a new review (currently you can sometimes observe a slight delay between submitting a review and the average rating update, because actioncable pushes _asynchronously after_ the review has been saved, while the review itself is added immediately on client side with optimistic ui)
+- improve the modal overall (maybe use a dedicated library)
+- speed up the star images loading time (maybe sprite, maybe preload or use img tag instead of css background-image, etc.)
+- improve the dev-tooling (e.g. seek to use hot-reload for React, maybe better-errors for Rails, etc.)
+- if I was to name non-technical but business improvements, an authentication system to allow only signed up users to review would obviously make sense
+
 ## Testing
 
 `bundle exec rspec`
@@ -46,4 +58,6 @@ Ultimately, I will be going for approach 2., mainly because I feel like I can sa
 
 You also need to have Redis running on your machine to run the tests.
 
-All the useful tests are in [`spec/features/reviews_spec.rb`](spec/features/reviews_spec.rb).
+_Above notes do not apply to the vanillajs branch, because there is no actioncable._
+
+All the useful tests are in [`spec/features/reviews_spec.rb`](spec/features/reviews_spec.rb) and [`spec/models/review_spec.rb`](spec/features/reviews_spec.rb).
