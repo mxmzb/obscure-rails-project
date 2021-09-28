@@ -34,7 +34,7 @@ Meaning that we mark already existing reviews with a flag that indicates it is a
 
 In this particular case, I think approach 1. and 2. are fairly similar and good. Approach 3. is not favorible, but may become more favorible if the data that we're working with is difficult (or maybe even impossible) to transform homogenously (normalize) into a new data format.
 
-Ultimately, I will be going for approach 2., simply because I feel like I can save a few lines of code on it (e.g. I just need to change the field type from int to float, and can avoid multiplying every value by 2).
+Ultimately, I will be going for approach 2., mainly because I feel like I can save a few lines of code on it (e.g. I just need to change the field type from int to float, and can avoid multiplying every value by 2) and because it is probably a little less work to adjust already existing tests to the floating 5-points rating system.
 
 ## Testing
 
