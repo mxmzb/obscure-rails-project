@@ -60,4 +60,4 @@ You also need to have Redis running on your machine to run the tests.
 
 _Above notes do not apply to the vanillajs branch, because there is no actioncable._
 
-All the useful tests are in [`spec/features/reviews_spec.rb`](spec/features/reviews_spec.rb) and [`spec/models/review_spec.rb`](spec/features/reviews_spec.rb).
+All the useful tests are in [`spec/features/reviews_spec.rb`](spec/features/reviews_spec.rb) and [`spec/models/review_spec.rb`](spec/models/review_spec.rb).
